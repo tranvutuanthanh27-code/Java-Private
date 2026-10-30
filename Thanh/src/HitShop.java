@@ -65,6 +65,23 @@ public class HitShop {
         }
         return total;
     }
+    //===Hàm có VAT SHIPPING FEE===//
+    static void printbill (){
+        double VAT = 0.1 , SHIPPING_FEE = 20000;
+        double cal = calculateTotal();
+        double MoneyVAT = 0.1 * cal;
+        double shipping;
+        if (names.isEmpty()){
+            shipping = 0;
+        } else{
+            shipping = SHIPPING_FEE;
+        }
+        System.out.println("Tổng Tiền Hàng : "+ cal);
+        System.out.println("Tính Thuế : "+ MoneyVAT) ;
+        System.out.println("Tiền SHIP :" + shipping);
+       double Sum = cal + MoneyVAT + shipping;
+        System.out.println("Tổng Thanh Toán : "+Sum);
+    }
     //===Hàm In sản phẩm===//
     static void printItems (){
         if (names.isEmpty()){
@@ -82,14 +99,31 @@ public class HitShop {
         System.out.println("2.Xoá mặt hàng (nhập)");
         System.out.println("3.Xem giỏ");
         System.out.println("4.Xem tổng tiền");
+        System.out.println("5.Tìm Tên Sản phẩm");
         System.out.println("0.Kết Thúc");
     }
-
+//====Hàm tìm tên===//
+   static void searchName(Scanner sc) {
+       String keyword;
+       System.out.print("Tên Sản phẩm bạn muốn tìm :");
+       keyword = sc.nextLine();
+       boolean found = false;
+       for (int i = 0; i < names.size(); i++) {
+           if (names.get(i).equalsIgnoreCase(keyword)) {
+               double linetotal = 0;
+               linetotal = prices.get(i) * quantites.get(i);
+               System.out.printf("%d. %s || %.1f || Sl : %d || Thành Tiền : %.1f%n", i + 1, names.get(i), prices.get(i), quantites.get(i), linetotal);
+               found = true;
+           }
+       }
+       if (!found){
+           System.out.println("Không tìm thấy sản phẩm nào tên là " + keyword);
+       }
+   }
 
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        double VAT_Rate = 0.10 , SHIPPING_FEE = 20000;
         int choice;
         do {
             System.out.println("=========Menu=========");
@@ -101,7 +135,8 @@ public class HitShop {
                 case 1 -> addItem(sc);
                 case 2 -> removeItem(sc);
                 case 3 -> printItems();
-                case 4 -> System.out.println("Tổng tiền :" + calculateTotal());
+                case 4 -> printbill();
+                case 5 -> searchName(sc);
                 case 0 -> System.out.println("Kết Thúc !");
                 default -> System.out.println("Vui Lòng chọn đúng !");
 
